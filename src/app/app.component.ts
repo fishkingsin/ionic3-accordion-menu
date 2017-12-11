@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-
+import {DataServiceProvider} from '../providers/data-service/data-service';
 @Component({
   templateUrl: 'app.html'
 })
@@ -16,14 +16,19 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+
+  showLevel1 = null;
+  showLevel2 = null;
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public dataServiceProvider:DataServiceProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
+    this.dataServiceProvider.getMenus()
+    .subscribe((response)=> {
+        this.pages = response;
+        console.log(this.pages);
+    });
+
 
   }
 
@@ -41,4 +46,29 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  toggleLevel1(idx) {
+    if (this.isLevel1Shown(idx)) {
+      this.showLevel1 = null;
+    } else {
+      this.showLevel1 = idx;
+    }
+  };
+
+  toggleLevel2(idx) {
+    if (this.isLevel2Shown(idx)) {
+      this.showLevel1 = null;
+      this.showLevel2 = null;
+    } else {
+      this.showLevel1 = idx;
+      this.showLevel2 = idx;
+    }
+  };
+  isLevel1Shown(idx) {
+    return this.showLevel1 === idx;
+  };
+
+  isLevel2Shown(idx) {
+    return this.showLevel2 === idx;
+  };
 }
