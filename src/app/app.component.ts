@@ -14,7 +14,7 @@ export class MyApp {
 
   rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Object;
 
 
   showLevel1 = null;
@@ -26,7 +26,7 @@ export class MyApp {
     this.dataServiceProvider.getMenus()
     .subscribe((response)=> {
         this.pages = response;
-        console.log(this.pages);
+        console.log(response);
     });
 
 
